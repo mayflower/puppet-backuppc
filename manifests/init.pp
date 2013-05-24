@@ -54,7 +54,8 @@ class backuppc inherits backuppc::params {
   exec { 'backuppc-ssh-keygen':
     command => "/usr/bin/ssh-keygen -f ${topdir}/.ssh/id_rsa -C 'BackupPC on ${::fqdn}' -N ''",
     user    => 'backuppc',
-    unless  => "test -f ${topdir}/.ssh/id_rsa"
+    unless  => "test -f ${topdir}/.ssh/id_rsa",
+    require => Package[$package]
   }
 
   # Export backuppc's authorized key to all clients
