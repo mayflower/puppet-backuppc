@@ -38,14 +38,6 @@ class backuppc::client (
     owner   => 'backup',
     group   => 'backup',
   }
-  
-
-  @@concat { "${topdir}/pc/${::fqdn}/exclude.list":
-    owner => 'backuppc',
-    group => 'backuppc',
-    mode  => 0750,
-    tag   => "backuppc_exclude_${::domain}"
-  }
 
   @@concat::fragment { "backuppc_host_${::fqdn}":
     target  => '/etc/backuppc/hosts',
@@ -53,7 +45,7 @@ class backuppc::client (
     notify  => Service[$service],
     tag     => "backuppc_hosts_${::domain}"
   }
-  
+
   @@file { "${topdir}/pc/${::fqdn}":
     ensure  => directory,
     owner   => 'backuppc',
@@ -61,7 +53,7 @@ class backuppc::client (
     mode    => 0750,
     tag     => "backuppc_pc_${::domain}",
   }
-  
+
   @@file { "${topdir}/pc/${::fqdn}/config.pl":
     ensure  => present,
     content => template("${module_name}/host.pl.erb"),
@@ -71,7 +63,7 @@ class backuppc::client (
     notify  => Service[$service],
     tag     => "backuppc_config_${::domain}"
   }
-  
+
   Ssh_authorized_key <<| tag == "backuppc_${::domain}" |>> {
     require => File["${home_directory}/.ssh"]
   }

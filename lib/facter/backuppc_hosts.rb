@@ -4,7 +4,7 @@ Facter.add('backuppc_hosts') do
       data = File.open('/etc/backuppc/hosts').read.split(/\n/)
       data.shift
 
-      data.map {|it| it.split(' ')[0] }
+      data.map {|it| it.split(' ')[0] }.join(',')
     end
   end
 end

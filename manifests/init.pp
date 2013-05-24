@@ -13,7 +13,7 @@
 # [Remember: No empty lines between comments and class definition]
 class backuppc inherits backuppc::params {
   include concat::setup
-  
+
   # Set up dependencies
   Package[$package] -> File[$config] -> Service[$service]
 
@@ -42,14 +42,14 @@ class backuppc inherits backuppc::params {
     mode    => '0644',
     # content => template("${module_name}/config.pl"),
   }
-  
+
   file { $config_directory:
     ensure  => present,
     owner   => 'backuppc',
     group   => 'www-data',
     require => Package[$package]
   }
-  
+
   exec { 'backuppc-ssh-keygen':
     command => "/usr/bin/ssh-keygen -f ${topdir}/.ssh/id_rsa -C 'BackupPC on ${::fqdn}' -N ''",
     user    => 'backuppc',
@@ -69,27 +69,20 @@ class backuppc inherits backuppc::params {
     type    => 'ssh-rsa',
     tag     => "backuppc_${::domain}",
   }
-  
+
   # Hosts
   concat { '/etc/backuppc/hosts':
     owner => 'backuppc',
     group => 'backuppc',
     mode  => 0750
   }
-  
-  # FIXME: we use a custom fact to setup concat ...
-  create_resources('concat', $backuppc_hosts, {
-    owner => 'backuppc',
-    group => 'backuppc',
-    mode  => 0750
-  })
 
   concat::fragment { 'hosts_header':
     target  => '/etc/backuppc/hosts',
-    content => "host        dhcp    user    moreUsers     # <--- do not edit this line\n",
+    content => "host        dhcp    user    moreUsers    # <--- do not edit this line\n",
     order   => 01,
   }
-  
+
   File <<| tag == "backuppc_pc_${::domain}" |>>
   File <<| tag == "backuppc_config_${::domain}" |>>
   Concat::Fragment <<| tag == "backuppc_hosts_${::domain}" |>>

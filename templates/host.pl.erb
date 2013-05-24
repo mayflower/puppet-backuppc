@@ -979,7 +979,7 @@ $Conf{RsyncArgs} = [
 #     ];
 #
 $Conf{RsyncArgsExtra} = [
-  '--exclude-from=$confDir/pc/$host/exclude.list',
+  '--exclude-from=/var/lib/backuppc/pc/$host/exclude.list',
 ];
 
 #
@@ -1284,7 +1284,7 @@ $Conf{FixedIPNetBiosNameCheck} = 0;
 #     $Conf{PingPath} = '/bin/echo';
 #
 $Conf{PingPath} = '/bin/ping';
-$Conf{Ping6Path} = '';
+$Conf{Ping6Path} = '/bin/ping6';
 
 #
 # Ping command.  The following variables are substituted at run-time:
