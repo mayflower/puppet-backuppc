@@ -41,6 +41,7 @@ class backuppc inherits backuppc::params {
     group   => 'www-data',
     mode    => '0644',
     # content => template("${module_name}/config.pl"),
+    require => Package[$package]
   }
 
   file { $config_directory:
@@ -74,7 +75,8 @@ class backuppc inherits backuppc::params {
   concat { '/etc/backuppc/hosts':
     owner => 'backuppc',
     group => 'backuppc',
-    mode  => 0750
+    mode  => 0750,
+    require => Package[$package]
   }
 
   concat::fragment { 'hosts_header':
