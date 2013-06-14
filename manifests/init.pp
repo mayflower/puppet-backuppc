@@ -80,6 +80,9 @@ class backuppc inherits backuppc::params {
     require => Package[$package]
   }
 
+  # get ssh hostkeys from puppet to avoid 'Unable to read 4 bytes' error in backuppc
+  class { 'ssh::client': }
+
   concat::fragment { 'hosts_header':
     target  => '/etc/backuppc/hosts',
     content => "host        dhcp    user    moreUsers    # <--- do not edit this line\n",
