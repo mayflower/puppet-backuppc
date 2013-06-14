@@ -34,7 +34,7 @@ class backuppc::client (
 
   file { "${home_directory}/.ssh":
     ensure  => directory,
-    mode    => 0700,
+    mode    => '0700',
     owner   => 'backup',
     group   => 'backup',
   }
@@ -50,7 +50,7 @@ class backuppc::client (
     ensure  => directory,
     owner   => 'backuppc',
     group   => 'backuppc',
-    mode    => 0750,
+    mode    => '0750',
     tag     => "backuppc_pc_${::domain}",
   }
 
@@ -72,7 +72,7 @@ class backuppc::client (
     ensure  => present,
     owner   => 'root',
     group   => 'root',
-    mode    => 440,
+    mode    => '0440',
     content => "backup ALL=(ALL:ALL) NOPASSWD: /usr/bin/rsync\n",
     require => Package['sudo']
   }
