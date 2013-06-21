@@ -9,6 +9,7 @@ define backuppc::client::exclude ($exclude) {
   @@concat::fragment { "backuppc_exclude_${::fqdn}_${name}":
     target  => "/var/lib/backuppc/pc/${::fqdn}/exclude.list",
     content => inline_template("<%= exclude.join('\n') %>\n"),
+    require => Package['backuppc'],
     tag     => "backuppc_exclude_${::domain}"
   }
 }

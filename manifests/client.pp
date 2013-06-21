@@ -51,6 +51,7 @@ class backuppc::client (
     owner   => 'backuppc',
     group   => 'backuppc',
     mode    => '0750',
+    require => Package['backuppc'],
     tag     => "backuppc_pc_${::domain}",
   }
 
@@ -61,6 +62,7 @@ class backuppc::client (
     group   => 'www-data',
     mode    => '0740',
     notify  => Service[$service],
+    require => Package['backuppc'],
     tag     => "backuppc_config_${::domain}"
   }
 
