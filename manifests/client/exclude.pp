@@ -1,4 +1,7 @@
-define backuppc::client::exclude ($exclude) {
+define backuppc::client::exclude (
+  $exclude,
+  $domain = $::domain,
+) {
   include backuppc::params
   include backuppc::client::params
 
@@ -10,6 +13,6 @@ define backuppc::client::exclude ($exclude) {
     target  => "/var/lib/backuppc/pc/${::fqdn}/exclude.list",
     content => inline_template("<%= exclude.join('\n') %>\n"),
     require => Package['backuppc'],
-    tag     => "backuppc_exclude_${::domain}"
+    tag     => "backuppc_exclude_${domain}"
   }
 }
