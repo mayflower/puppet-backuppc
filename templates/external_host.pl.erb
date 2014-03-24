@@ -1,0 +1,188 @@
+$ENV{'PATH'} = '/bin:/usr/bin';
+delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+
+##############################################################
+# This file is managed by puppet!                            #
+# Any manual changes will be lost during the next puppet run.#
+##############################################################
+
+##############################################################
+# Most parameters are (not yet) configurable via puppet      #
+# Feel free to extend the template and define type :)        #
+##############################################################
+
+$Conf{FullPeriod}          = <%= full_period -%>;
+$Conf{IncrPeriod}          = <%= incr_period -%>;
+$Conf{FullKeepCnt}         = <%= keep_full -%>;
+$Conf{FullKeepCntMin}      = <%= keep_full -%>;
+$Conf{FullAgeMax}          = <%= maxage_full -%>;
+$Conf{IncrKeepCnt}         = <%= keep_incr -%>;
+$Conf{IncrKeepCntMin}      = <%= keep_incr -%>;
+$Conf{IncrAgeMax}          = <%= maxage_incr -%>;
+$Conf{IncrLevels}          = [1];
+$Conf{BackupsDisable}      = 0;
+$Conf{PartialAgeMax}       = <%= maxage_partial -%>;
+$Conf{IncrFill}            = 0;
+$Conf{RestoreInfoKeepCnt}  = 10;
+$Conf{ArchiveInfoKeepCnt}  = 10;
+$Conf{BackupFilesOnly}     = undef;
+$Conf{BackupFilesExclude}  = {
+'*' => [
+<% backupfileexclude.each do |ex| -%>
+  '<%= ex -%>',
+<% end -%>
+]
+};
+
+$Conf{BlackoutBadPingLimit}  = 3;
+$Conf{BlackoutGoodCnt}       = 7;
+$Conf{BlackoutPeriods}       = [
+    {
+	hourBegin =>  7.0,
+	hourEnd   => 19.5,
+	weekDays  => [1, 2, 3, 4, 5],
+    },
+];
+
+$Conf{BackupZeroFilesIsFatal}  = 1;
+$Conf{XferMethod}              = '<%= xfer_method -%>';
+$Conf{XferLogLevel}            = <%= xfer_loglevel -%>;
+$Conf{ClientCharset}           = '';
+$Conf{ClientCharsetLegacy}     = 'iso-8859-1';
+$Conf{SmbShareName}            = [
+<% smbsharename.each do |share| -%>
+  '<%= share -%>',                                                                 
+<% end -%>                                                                      
+];
+$Conf{SmbShareUserName}        = '<%= smbshareusername -%>';
+$Conf{SmbSharePasswd}          = '<%= smbsharepasswd -%>';
+$Conf{SmbClientPath}           = '/usr/bin/smbclient';
+
+$Conf{SmbClientFullCmd}          = '$smbClientPath \\\\$host\\$shareName'
+                                 . ' $I_option -U $userName -E -d 1'
+                                 . ' -c tarmode\\ full -Tc$X_option - $fileList';
+
+$Conf{SmbClientIncrCmd}          = '$smbClientPath \\\\$host\\$shareName'
+                                 . ' $I_option -U $userName -E -d 1'
+                                 . ' -c tarmode\\ full -TcN$X_option $timeStampFile - $fileList';
+
+$Conf{SmbClientRestoreCmd}       = '$smbClientPath \\\\$host\\$shareName'
+                                 . ' $I_option -U $userName -E -d 1'
+                                 . ' -c tarmode\\ full -Tx -';
+
+$Conf{TarShareName}              = '/';
+$Conf{TarClientCmd}              = '$sshPath -q -x -n -l root $host'
+                                 . ' env LC_ALL=C $tarPath -c -v -f - -C $shareName+'
+                                 . ' --totals';
+
+$Conf{TarFullArgs}               = '$fileList+';
+$Conf{TarIncrArgs}               = '--newer=$incrDate+ $fileList+';
+$Conf{TarClientRestoreCmd}       = '$sshPath -q -x -l root $host'
+                                 . ' env LC_ALL=C $tarPath -x -p --numeric-owner --same-owner'
+                                 . ' -v -f - -C $shareName+';
+
+$Conf{TarClientPath}             = '/bin/tar';
+$Conf{RsyncClientPath}           = '/usr/bin/rsync';
+$Conf{RsyncClientCmd}            = '$sshPath -q -x -l backup $host $rsyncPath $argList+';
+$Conf{RsyncClientRestoreCmd}     = '$sshPath -q -x -l root $host $rsyncPath $argList+';
+$Conf{RsyncShareName}            = '/';
+$Conf{RsyncdClientPort}          = 873;
+$Conf{RsyncdUserName}            = '';
+$Conf{RsyncdPasswd}              = '';
+$Conf{RsyncdAuthRequired}        = 1;
+$Conf{RsyncCsumCacheVerifyProb}  = 0.01;
+$Conf{RsyncArgs}                 = [
+	    #
+	    # Do not edit these!
+	    #
+            '--numeric-ids',
+            '--perms',
+            '--owner',
+            '--group',
+            '-D',
+            '--links',
+            '--hard-links',
+            '--times',
+            '--block-size=2048',
+            '--recursive',
+];
+$Conf{RsyncArgsExtra}            = [
+  '--exclude-from=/var/lib/backuppc/pc/$host/exclude.list',
+];
+$Conf{RsyncRestoreArgs}          = [
+	    #
+	    # Do not edit these!
+	    #
+	    '--numeric-ids',
+	    '--perms',
+	    '--owner',
+	    '--group',
+	    '-D',
+	    '--links',
+      '--hard-links',
+	    '--times',
+	    '--block-size=2048',
+	    '--relative',
+	    '--ignore-times',
+	    '--recursive',
+	    #
+	    # Add additional arguments here
+	    #
+];
+$Conf{FtpShareName}       = '';
+$Conf{FtpUserName}        = '';
+$Conf{FtpPasswd}          = '';
+$Conf{FtpPassive}         = 1;
+$Conf{FtpBlockSize}       = 10240;
+$Conf{FtpPort}            = 21;
+$Conf{FtpTimeout}         = 120;
+$Conf{FtpFollowSymlinks}  = 0;
+$Conf{ArchiveDest}        = '/tmp';
+$Conf{ArchiveComp}        = 'gzip';
+$Conf{ArchivePar}         = 0;
+$Conf{ArchiveSplit}       = 0;
+
+$Conf{ArchiveClientCmd}   = '$Installdir/bin/BackupPC_archiveHost'
+                          . ' $tarCreatePath $splitpath $parpath $host $backupnumber'
+                          . ' $compression $compext $splitsize $archiveloc $parfile *';
+
+$Conf{SshPath}                    = '/usr/bin/ssh' if -x '/usr/bin/ssh';
+$Conf{NmbLookupPath}              = '/usr/bin/nmblookup';
+$Conf{NmbLookupCmd}               = '$nmbLookupPath -A $host';
+$Conf{NmbLookupFindHostCmd}       = '$nmbLookupPath $host';
+$Conf{FixedIPNetBiosNameCheck}    = 0;
+$Conf{PingPath}                   = '/bin/ping';
+$Conf{Ping6Path}                  = '/bin/ping6';
+$Conf{PingCmd}                    = '$pingPath -c 1 $host';
+$Conf{PingMaxMsec}                = 20;
+$Conf{CompressLevel}              = 3;
+$Conf{ClientTimeout}              = 72000;
+$Conf{MaxOldPerPCLogFiles}        = 12;
+$Conf{DumpPreUserCmd}             = undef;
+$Conf{DumpPostUserCmd}            = undef;
+$Conf{DumpPreShareCmd}            = undef;
+$Conf{DumpPostShareCmd}           = undef;
+$Conf{RestorePreUserCmd}          = undef;
+$Conf{RestorePostUserCmd}         = undef;
+$Conf{ArchivePreUserCmd}          = undef;
+$Conf{ArchivePostUserCmd}         = undef;
+$Conf{UserCmdCheckStatus}         = 0;
+$Conf{ClientNameAlias}            = undef;
+$Conf{SendmailPath}               = '/usr/sbin/sendmail';
+$Conf{EMailNotifyMinDays}         = 2.5;
+$Conf{EMailFromUserName}          = 'backuppc';
+$Conf{EMailAdminUserName}         = 'backuppc';
+$Conf{EMailUserDestDomain}        = '';
+$Conf{EMailNoBackupEverSubj}      = undef;
+$Conf{EMailNoBackupEverMesg}      = undef;
+$Conf{EMailNotifyOldBackupDays}   = 7.0;
+$Conf{EMailNoBackupRecentSubj}    = undef;
+$Conf{EMailNoBackupRecentMesg}    = undef;
+$Conf{EMailNotifyOldOutlookDays}  = 5.0;
+$Conf{EMailOutlookBackupSubj}     = undef;
+$Conf{EMailOutlookBackupMesg}     = undef;
+$Conf{EMailHeaders}               = <<EOF;
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+EOF
+

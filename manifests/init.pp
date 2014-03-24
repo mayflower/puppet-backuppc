@@ -11,7 +11,9 @@
 # Sample Usage:
 #
 # [Remember: No empty lines between comments and class definition]
-class backuppc inherits backuppc::params {
+class backuppc (
+  $ext_hosts      = {}
+) inherits backuppc::params {
   include concat::setup
 
   # Set up dependencies
@@ -89,9 +91,20 @@ class backuppc inherits backuppc::params {
     order   => 01,
   }
 
+  # exported resources from other hosts
   File <<| tag == "backuppc_pc_${::domain}" |>>
   File <<| tag == "backuppc_config_${::domain}" |>>
   Concat::Fragment <<| tag == "backuppc_hosts_${::domain}" |>>
+
+  # virtual resources for externally defines hosts
+  $external_defaults = {
+    'topdir'  => $topdir,
+    'service' => $service,
+  }
+  create_resources("backuppc::external", $ext_hosts, $external_defaults)
+  File <| tag == "backuppc_pc_${::domain}" |>
+  File <| tag == "backuppc_config_${::domain}" |>
+  Concat::Fragment <| tag == "backuppc_hosts_${::domain}" |>
 
   Concat <<| tag == "backuppc_exclude_${::domain}" |>>
   Concat::Fragment <<| tag == "backuppc_exclude_${::domain}" |>>
