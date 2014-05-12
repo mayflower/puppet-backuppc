@@ -85,7 +85,7 @@ $Conf{TarClientPath}             = '/bin/tar';
 $Conf{RsyncClientPath}           = '/usr/bin/rsync';
 $Conf{RsyncClientCmd}            = '$sshPath -q -x -l backup $host $rsyncPath $argList+';
 $Conf{RsyncClientRestoreCmd}     = '$sshPath -q -x -l root $host $rsyncPath $argList+';
-$Conf{RsyncShareName}            = '/';
+$Conf{RsyncShareName}            = '<%= rsyncsharename -%>';
 $Conf{RsyncdClientPort}          = 873;
 $Conf{RsyncdUserName}            = '';
 $Conf{RsyncdPasswd}              = '';

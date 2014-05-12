@@ -16,6 +16,8 @@ define backuppc::external (
   $xfer_method      = 'rsync',
   $xfer_loglevel    = 1,
 
+  $rsyncsharename    = '/',
+
   $smbsharename      = 'C$',
   $smbshareusername  = '',
   $smbsharepasswd    = '',
