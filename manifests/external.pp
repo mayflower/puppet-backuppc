@@ -27,6 +27,8 @@ define backuppc::external (
   $hostname = $name,
   $username = 'backuppc',
   $domain = $::domain,
+
+  $custom_config = {},
 ) {
   @concat::fragment { "backuppc_host_${hostname}":
     target  => '/etc/backuppc/hosts',

@@ -186,3 +186,6 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 EOF
 
+<% custom_config.each do |key,value| -%>
+$Conf{<%= key %>} = <%= value %>;
+<% end -%>
