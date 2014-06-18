@@ -25,7 +25,7 @@ define backuppc::external (
   $backupfileexclude = [],  # ignore '\\\\pagefile.sys' for Windows or whole backup might break :/
 
   $hostname = $name,
-  $username = 'backuppc',
+  $username = 'backup',
   $domain = $::domain,
 
   $custom_config = {},
