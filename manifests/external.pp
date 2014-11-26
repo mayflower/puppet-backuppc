@@ -18,7 +18,7 @@ define backuppc::external (
 
   $rsyncsharename    = '/',
 
-  $smbsharename      = 'C$',
+  $smbsharename      = ['C$'],
   $smbshareusername  = '',
   $smbsharepasswd    = '',
 
