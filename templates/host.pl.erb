@@ -324,7 +324,15 @@ $Conf{ArchiveInfoKeepCnt} = 10;
 #       '*' => ['/myFiles', '/important'],      # these are other shares
 #    };
 #
+<% if @only -%>
+$Conf{BackupFilesOnly} = [
+<% only.each do |x| -%>
+  '<%= x -%>',
+<% end -%>
+];
+<% else -%>
 $Conf{BackupFilesOnly} = undef;
+<% end -%>
 
 #
 # List of directories or files to exclude from the backup.  For Smb,
@@ -380,11 +388,15 @@ $Conf{BackupFilesOnly} = undef;
 #       '*' => ['/junk', '/dont_back_this_up'], # these are for other shares
 #    };
 #
+<% if @exclude -%>
 $Conf{BackupFilesExclude} = [
 <% exclude.each do |ex| -%>
   '<%= ex -%>',
 <% end -%>
 ];
+<% else -%>
+$Conf{BackupFilesExclude} = undef;
+<% end -%>
 
 #
 # PCs that are always or often on the network can be backed up after
