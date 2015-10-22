@@ -12,7 +12,6 @@ class backuppc::client (
     $blackoutcount    = 7,
     $xfer_method      = 'rsync',
     $xfer_loglevel    = 1,
-    $domain           = $::domain,
 ) inherits backuppc::client::params {
   user { 'backup':
     ensure  => present,
@@ -44,7 +43,7 @@ class backuppc::client (
     target  => '/etc/backuppc/hosts',
     content => "${::fqdn} 0 backuppc\n",
     notify  => Service[$service],
-    tag     => "backuppc_hosts_${domain}"
+    tag     => "backuppc_hosts"
   }
 
   @@file { "${topdir}/pc/${::fqdn}":
@@ -53,7 +52,7 @@ class backuppc::client (
     group   => 'backuppc',
     mode    => '0750',
     require => Package['backuppc'],
-    tag     => "backuppc_pc_${domain}",
+    tag     => "backuppc_pc",
   }
 
   @@file { "${topdir}/pc/${::fqdn}/config.pl":
@@ -64,10 +63,10 @@ class backuppc::client (
     mode    => '0740',
     notify  => Service[$service],
     require => Package['backuppc'],
-    tag     => "backuppc_config_${domain}"
+    tag     => "backuppc_config"
   }
 
-  Ssh_authorized_key <<| tag == "backuppc_${domain}" |>> {
+  Ssh_authorized_key <<| tag == "backuppc" |>> {
     require => File["${home_directory}/.ssh"]
   }
 

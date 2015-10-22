@@ -71,7 +71,7 @@ class backuppc (
       'command="/var/backups/backuppc.sh"'
     ],
     type    => 'ssh-rsa',
-    tag     => "backuppc_${::domain}",
+    tag     => "backuppc",
   }
 
   # Hosts
@@ -92,9 +92,9 @@ class backuppc (
   }
 
   # exported resources from other hosts
-  File <<| tag == "backuppc_pc_${::domain}" |>>
-  File <<| tag == "backuppc_config_${::domain}" |>>
-  Concat::Fragment <<| tag == "backuppc_hosts_${::domain}" |>>
+  File <<| tag == "backuppc_pc" |>>
+  File <<| tag == "backuppc_config" |>>
+  Concat::Fragment <<| tag == "backuppc_hosts" |>>
 
   # virtual resources for externally defines hosts
   $external_defaults = {
@@ -102,10 +102,10 @@ class backuppc (
     'service' => $service,
   }
   create_resources("backuppc::external", $ext_hosts, $external_defaults)
-  File <| tag == "backuppc_pc_${::domain}" |>
-  File <| tag == "backuppc_config_${::domain}" |>
-  Concat::Fragment <| tag == "backuppc_hosts_${::domain}" |>
+  File <| tag == "backuppc_pc" |>
+  File <| tag == "backuppc_config" |>
+  Concat::Fragment <| tag == "backuppc_hosts" |>
 
-  Concat <<| tag == "backuppc_exclude_${::domain}" |>>
-  Concat::Fragment <<| tag == "backuppc_exclude_${::domain}" |>>
+  Concat <<| tag == "backuppc_exclude" |>>
+  Concat::Fragment <<| tag == "backuppc_exclude" |>>
 }

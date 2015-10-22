@@ -26,7 +26,6 @@ define backuppc::external (
 
   $hostname = $name,
   $username = 'backup',
-  $domain = $::domain,
 
   $custom_config = {},
 ) {
@@ -34,7 +33,7 @@ define backuppc::external (
     target  => '/etc/backuppc/hosts',
     content => "${hostname} 0 ${username}\n",
     notify  => Service[$service],
-    tag     => "backuppc_hosts_${domain}"
+    tag     => "backuppc_hosts"
   }
 
   @file { "${topdir}/pc/${hostname}":
@@ -43,7 +42,7 @@ define backuppc::external (
     group   => 'backuppc',
     mode    => '0750',
     require => Package['backuppc'],
-    tag     => "backuppc_pc_${domain}",
+    tag     => "backuppc_pc",
   }
 
   @file { "${topdir}/pc/${hostname}/config.pl":
@@ -54,7 +53,7 @@ define backuppc::external (
     mode    => '0740',
     notify  => Service[$service],
     require => Package['backuppc'],
-    tag     => "backuppc_config_${domain}"
+    tag     => "backuppc_config"
   }
 
 }
